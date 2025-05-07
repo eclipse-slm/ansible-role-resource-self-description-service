@@ -1,0 +1,11 @@
+[Unit]
+Description=Resource Self Description Service
+#Wants=network-online.target
+After=network-online.target
+
+[Service]
+User={{ username }}
+ExecStart=/usr/bin/java -jar {{ download_path }}{{download_file_name}}
+
+[Install]
+WantedBy=default.target

@@ -1,0 +1,9 @@
+---
+- name: Converge - Install (ssh)
+  hosts: ssh
+  gather_facts: yes
+  become: yes
+  tasks:
+    - name: "Include resource_self_description_service - state = present"
+      ansible.builtin.include_role:
+        name: "resource_self_description_service"
