@@ -68,6 +68,15 @@
   when: ansible_os_family == "RedHat"
   changed_when: false
 
+
+- name: "customize /etc/environment"
+  ansible.builtin.lineinfile:
+    dest: "/etc/environment"
+    state: present
+    regexp: "^{{ item.key }}="
+    line: "{{ item.key }}={{ item.value }}"
+  with_items: "{{ hosts }}"
+
 - name: "Start resource-self-description-service service"
   ansible.builtin.systemd:
     state: started
