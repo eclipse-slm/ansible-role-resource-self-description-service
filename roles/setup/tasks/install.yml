@@ -77,6 +77,7 @@
     create: yes
   loop:
     - { ip: "{{ consul }}", name: "consul" }
+    - { ip: "{{ keycloak }}", name: "keycloak" }
     - { ip: "{{ aas_registry }}", name: "aas-registry" }
     - { ip: "{{ aas_repository }}", name: "aas-repository" }
     - { ip: "{{ submodel_registry }}", name: "submodel-registry" }

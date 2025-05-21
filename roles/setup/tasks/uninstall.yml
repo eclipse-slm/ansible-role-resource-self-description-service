@@ -52,6 +52,7 @@
     state: absent
   loop:
     - { name: "consul" }
+    - { name: "keycloak" }
     - { name: "aas-registry" }
     - { name: "aas-repository" }
     - { name: "submodel-registry" }
