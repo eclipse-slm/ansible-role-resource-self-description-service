@@ -17,9 +17,9 @@
       ansible.builtin.include_role:
         name: "setup"
       vars:
-        aas-registry: "{{ (consul_service_meta | from_json).aas-registry }}"
-        aas-repository: "{{ (consul_service_meta | from_json).aas-repository }}"
-        submodel-registry: "{{ (consul_service_meta | from_json).submodel-registry }}"
-        submodel-repository: "{{ (consul_service_meta | from_json).submodel-repository | default('127.0.0.1') }}"
+        aas_registry: "{{ (consul_service_meta | from_json).aas-registry }}"
+        aas_repository: "{{ (consul_service_meta | from_json).aas-repository }}"
+        submodel_registry: "{{ (consul_service_meta | from_json).submodel-registry }}"
+        submodel_repository: "{{ (consul_service_meta | from_json).submodel-repository | default('127.0.0.1') }}"
 
 

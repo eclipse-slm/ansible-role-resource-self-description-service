@@ -76,10 +76,10 @@
     state: present
     create: yes
   loop:
-    - { ip: "{{ aas-registry }}", name: "aas-registry" }
-    - { ip: "{{ aas-repository }}", name: "aas-repository" }
-    - { ip: "{{ submodel-registry }}", name: "submodel-registry" }
-    - { ip: "{{ submodel-repository }}", name: "submodel-repository" }
+    - { ip: "{{ aas_registry }}", name: "aas-registry" }
+    - { ip: "{{ aas_repository }}", name: "aas-repository" }
+    - { ip: "{{ submodel_registry }}", name: "submodel-registry" }
+    - { ip: "{{ submodel_repository }}", name: "submodel-repository" }
   become: yes
 
 - name: "Start resource-self-description-service service"
