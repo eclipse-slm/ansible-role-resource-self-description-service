@@ -30,6 +30,6 @@
         aas_registry: "{{ (consul_service_meta | from_json).aas_registry }}"
         aas_repository: "{{ (consul_service_meta | from_json).aas_repository }}"
         submodel_registry: "{{ (consul_service_meta | from_json).submodel_registry }}"
-        submodel_repository: "{{ (consul_service_meta | from_json).submodel_repository | default('127.0.0.1') }}"
+        submodel_repository: "{{ ((consul_service_meta | from_json).submodel_repository) | default('127.0.0.1') }}"
 
 
