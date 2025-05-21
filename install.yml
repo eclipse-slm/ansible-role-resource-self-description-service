@@ -15,6 +15,7 @@
 - assert:
     that:
       - (consul_token is defined) and (consul_token|length > 0)
+      - resource_id is defined
 
 - name: Install slm self-description service
   hosts: all

@@ -5,7 +5,7 @@ After=network-online.target
 
 [Service]
 User={{ username }}
-ExecStart=/usr/bin/java -jar {{ download_path }}{{download_file_name}} -Dconsul.acl-token={{ consul_token }}
+ExecStart=/usr/bin/java -jar {{ download_path }}{{download_file_name}} -Dconsul.acl-token={{ consul_token }} -Dresource.id={{ resource_id }}
 
 [Install]
 WantedBy=default.target
