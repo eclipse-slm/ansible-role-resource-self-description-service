@@ -44,3 +44,15 @@
   ansible.builtin.user:
     name: "{{ username }}"
     state: absent
+
+- name: Remove Host by name
+  ansible.builtin.lineinfile:
+    path: /etc/hosts
+    regexp: '.*\s+{{ item.name }}(\s+.*)?$'
+    state: absent
+  loop:
+    - { name: "consul" }
+    - { name: "aas_registry" }
+    - { name: "aas_repository" }
+    - { name: "submodel_registry" }
+    - { name: "submodel_repository" }
