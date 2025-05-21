@@ -76,6 +76,7 @@
     state: present
     create: yes
   loop:
+    - { ip: "{{ consul }}", name: "consul" }
     - { ip: "{{ aas_registry }}", name: "aas_registry" }
     - { ip: "{{ aas_repository }}", name: "aas_repository" }
     - { ip: "{{ submodel_registry }}", name: "submodel_registry" }

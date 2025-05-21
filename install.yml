@@ -8,6 +8,14 @@
       ansible.builtin.include_role:
         name: inventory_helper
 
+- name: Get config from environment variables
+  set_fact:
+    consul_token: "{{ lookup('env', 'CONSUL_TOKEN') }}"
+  no_log: true
+- assert:
+    that:
+      - (consul_token is defined) and (consul_token|length > 0)
+
 - name: Install slm self-description service
   hosts: all
   gather_facts: yes
@@ -17,6 +25,7 @@
       ansible.builtin.include_role:
         name: "setup"
       vars:
+        consul: "{{ (consul_service_meta | from_json).consul }}"
         aas_registry: "{{ (consul_service_meta | from_json).aas_registry }}"
         aas_repository: "{{ (consul_service_meta | from_json).aas_repository }}"
         submodel_registry: "{{ (consul_service_meta | from_json).submodel_registry }}"
