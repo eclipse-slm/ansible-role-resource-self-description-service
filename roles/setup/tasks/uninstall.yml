@@ -52,7 +52,7 @@
     state: absent
   loop:
     - { name: "consul" }
-    - { name: "aas_registry" }
-    - { name: "aas_repository" }
-    - { name: "submodel_registry" }
-    - { name: "submodel_repository" }
+    - { name: "aas-registry" }
+    - { name: "aas-repository" }
+    - { name: "submodel-registry" }
+    - { name: "submodel-repository" }
