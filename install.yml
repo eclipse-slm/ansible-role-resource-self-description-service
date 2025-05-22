@@ -26,8 +26,9 @@
       ansible.builtin.include_role:
         name: "setup"
       vars:
+        slm_host_name: "{{ ((consul_service_meta | from_json).slm_host_name) | default('') }}"
+        slm_host_ip: "{{ ((consul_service_meta | from_json).slm_host_ip) | default('') }}"
         consul: "{{ ((consul_service_meta | from_json).consul) | default('') }}"
-        keycloak: "{{ ((consul_service_meta | from_json).keycloak) | default('') }}"
         aas_registry: "{{ ((consul_service_meta | from_json).aas_registry) | default('') }}"
         aas_repository: "{{ ((consul_service_meta | from_json).aas_repository) | default('') }}"
         submodel_registry: "{{ ((consul_service_meta | from_json).submodel_registry) | default('') }}"
