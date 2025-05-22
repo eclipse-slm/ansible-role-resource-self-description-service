@@ -75,6 +75,7 @@
     line: "{{ item.ip }} {{ item.name }}"
     state: present
     create: yes
+    when: (item.ip is defined)
   loop:
     - { ip: "{{ consul }}", name: "consul" }
     - { ip: "{{ keycloak }}", name: "keycloak" }

@@ -27,6 +27,7 @@
         name: "setup"
       vars:
         consul: "{{ (consul_service_meta | from_json).consul }}"
+        keycloak: "{{ (consul_service_meta | from_json).keycloak }}"
         aas_registry: "{{ (consul_service_meta | from_json).aas_registry }}"
         aas_repository: "{{ (consul_service_meta | from_json).aas_repository }}"
         submodel_registry: "{{ (consul_service_meta | from_json).submodel_registry }}"
