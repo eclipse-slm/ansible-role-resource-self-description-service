@@ -75,7 +75,7 @@
     line: "{{ item.ip }} {{ item.name }}"
     state: present
     create: yes
-    when: (item.ip is defined)
+
   loop:
     - { ip: "{{ consul }}", name: "consul" }
     - { ip: "{{ keycloak }}", name: "keycloak" }
@@ -83,6 +83,7 @@
     - { ip: "{{ aas_repository }}", name: "aas-repository" }
     - { ip: "{{ submodel_registry }}", name: "submodel-registry" }
     - { ip: "{{ submodel_repository }}", name: "submodel-repository" }
+  when: (item.ip is defined) and (item.ip|length > 0)
   become: yes
 
 - name: "Start resource-self-description-service service"

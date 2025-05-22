@@ -26,11 +26,11 @@
       ansible.builtin.include_role:
         name: "setup"
       vars:
-        consul: "{{ (consul_service_meta | from_json).consul }}"
-        keycloak: "{{ (consul_service_meta | from_json).keycloak }}"
-        aas_registry: "{{ (consul_service_meta | from_json).aas_registry }}"
-        aas_repository: "{{ (consul_service_meta | from_json).aas_repository }}"
-        submodel_registry: "{{ (consul_service_meta | from_json).submodel_registry }}"
-        submodel_repository: "{{ ((consul_service_meta | from_json).submodel_repository) | default('127.0.0.1') }}"
+        consul: "{{ ((consul_service_meta | from_json).consul) | default('') }}"
+        keycloak: "{{ ((consul_service_meta | from_json).keycloak) | default('') }}"
+        aas_registry: "{{ ((consul_service_meta | from_json).aas_registry) | default('') }}"
+        aas_repository: "{{ ((consul_service_meta | from_json).aas_repository) | default('') }}"
+        submodel_registry: "{{ ((consul_service_meta | from_json).submodel_registry) | default('') }}"
+        submodel_repository: "{{ ((consul_service_meta | from_json).submodel_repository) | default('') }}"
 
 
