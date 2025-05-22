@@ -82,7 +82,6 @@
     - { ip: "{{ aas_registry }}", name: "aas-registry" }
     - { ip: "{{ aas_repository }}", name: "aas-repository" }
     - { ip: "{{ submodel_registry }}", name: "submodel-registry" }
-    - { ip: "{{ submodel_repository }}", name: "submodel-repository" }
   when: (item.ip is defined) and (item.ip|length > 0)
   become: yes
 

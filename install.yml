@@ -32,6 +32,5 @@
         aas_registry: "{{ ((consul_service_meta | from_json).aas_registry) | default('') }}"
         aas_repository: "{{ ((consul_service_meta | from_json).aas_repository) | default('') }}"
         submodel_registry: "{{ ((consul_service_meta | from_json).submodel_registry) | default('') }}"
-        submodel_repository: "{{ ((consul_service_meta | from_json).submodel_repository) | default('') }}"
 
 

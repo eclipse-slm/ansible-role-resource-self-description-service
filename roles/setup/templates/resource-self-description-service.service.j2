@@ -5,7 +5,7 @@ After=network-online.target
 
 [Service]
 User={{ username }}
-ExecStart=/usr/bin/java -jar {{ download_path }}{{download_file_name}} --consul.acl-token={{ consul_token }} --resource.id={{ resource_id }}
+ExecStart=/usr/bin/java -jar {{ download_path }}{{download_file_name}} --consul.acl-token={{ consul_token }} --resource.id={{ resource_id }} --aas.submodel-repository.host={{ ansible_default_ipv4.address }}
 
 [Install]
 WantedBy=default.target
