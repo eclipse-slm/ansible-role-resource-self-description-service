@@ -85,6 +85,17 @@
   when: (item.ip is defined) and (item.ip|length > 0)
   become: yes
 
+- ansible.builtin.include_role:
+    name: "vault"
+    tasks_from: add_certificate.yml
+  vars:
+    vault_url: "{{ vault_url }}"
+    role_id: "{{ vault_approle_role_id }}"
+    secret_id: "{{ vault_approle_secret_id }}"
+    resource_id: "{{ resource_id }}"
+    folder: "{{ download_path }}certs"
+
+
 - name: "Start resource-self-description-service service"
   ansible.builtin.systemd:
     state: started

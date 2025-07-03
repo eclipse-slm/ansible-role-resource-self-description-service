@@ -1,0 +1,4 @@
+- name: Recursively remove directory
+  ansible.builtin.file:
+    path: /etc/slm/ssl/resource
+    state: absent
