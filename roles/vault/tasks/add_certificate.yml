@@ -34,9 +34,13 @@
       - (_vault_token is defined) and (_vault_token|length > 0)
     fail_msg: "Variable must be defined and not empty"
 
+- name: "Set PKI name pki_int_{{ resource_id }}"
+  set_fact:
+    pki_int: "pki_int_{{ resource_id }}"
+
 - name: "Create a role named {{ _role_name }} which allows subdomains."
   uri:
-    url: "{{ vault_url }}v1/pki_int_{{ resource_id }}/issue/{{ resource_id }}"
+    url: "{{ vault_url }}/v1/{{ pki_int }}/issue/{{ resource_id }}"
     validate_certs: no
     method: POST
     headers:
