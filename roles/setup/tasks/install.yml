@@ -89,7 +89,7 @@
     name: "vault"
     tasks_from: add_certificate.yml
   vars:
-    vault_url: "{{ vault_url }}"
+    vault_url: "{{ lookup('env', 'VAULT_ADDR') }}"
     role_id: "{{ vault_approle_role_id }}"
     secret_id: "{{ vault_approle_secret_id }}"
     resource_id: "{{ resource_id }}"
