@@ -48,7 +48,7 @@
     status_code: 200, 204
     body_format: json
     body:
-      common_name: " {{ ansible_default_ipv4.address }}"
+      common_name: "{{ ansible_default_ipv4.address }}"
       ttl: "43800h"
   register: cert
 
