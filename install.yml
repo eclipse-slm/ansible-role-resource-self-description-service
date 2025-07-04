@@ -13,9 +13,14 @@
   gather_facts: yes
   become: yes
   tasks:
-    - name: Use inventory Helper to setup ansible inventory
-      ansible.builtin.include_role:
-        name: inventory_helper
+    - name: Get config from environment variables
+      set_fact:
+        consul_token: "{{ lookup('env', 'CONSUL_TOKEN') }}"
+      no_log: true
+    - assert:
+        that:
+          - (consul_token is defined) and (consul_token|length > 0)
+          - resource_id is defined
 
     - name: "Include self-description service - install"
       ansible.builtin.include_role:
