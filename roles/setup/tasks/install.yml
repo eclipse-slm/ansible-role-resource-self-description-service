@@ -90,8 +90,8 @@
     tasks_from: add_certificate.yml
   vars:
     vault_url: "{{ lookup('env', 'VAULT_ADDR') }}"
-    role_id: "{{ vault_approle_role_id }}"
-    secret_id: "{{ vault_approle_secret_id }}"
+    role_id: "{{ lookup('env', 'VAULT_APPROLE_ROLE_ID') }}"
+    secret_id: "{{ lookup('env', 'VAULT_APPROLE_SECRET_ID') }}"
     resource_id: "{{ resource_id }}"
     folder: "{{ download_path }}certs"
 
