@@ -1,1 +1,1 @@
-{{ cert.data.certificate }}
+{{ cert.json.data.certificate }}
