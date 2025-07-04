@@ -60,14 +60,14 @@
 - name: "Store Key"
   template:
     src: "resource.key"
-    dest: "{{ folder }}{{ resource_id }}.key"
+    dest: "{{ folder }}/{{ resource_id }}.key"
 
 - name: "Store Key"
   template:
     src: "resource-CA.crt"
-    dest: "{{ folder }}ca.crt"
+    dest: "{{ folder }}/ca.crt"
 
 - name: "Store Key"
   template:
     src: "resource-Cert.crt"
-    dest: "{{ folder }}{{ resource_id }}.crt"
+    dest: "{{ folder }}/{{ resource_id }}.crt"
