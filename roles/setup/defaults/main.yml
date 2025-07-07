@@ -5,6 +5,6 @@ username: "resource_sds"
 port: 8081
 
 
-download_github_user: "ilgmi"
+download_github_user: "eclipse-slm"
 download_file_name: "resource_self_description_service_{{ resource_self_description_service_version }}.jar"
 download_path: "/opt/resource-self-description-service/"
