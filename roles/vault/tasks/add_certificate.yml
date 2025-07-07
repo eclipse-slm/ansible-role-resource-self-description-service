@@ -72,17 +72,10 @@
     src: "resource-Cert.crt"
     dest: "{{ folder }}/{{ resource_id }}.crt"
 
-- name: "Load SLM Cert"
-  uri:
-    url: "{{ vault_url }}/v1/pki_int_{{ slm_host_name }}/ca"
-    validate_certs: no
-    method: GET
-    headers:
-      Authorization: "Bearer {{ _vault_token }}"
-    status_code: 200, 204
-    body_format: json
-  register: SLM_CRT
-- name: "Store SLM crt"
-  template:
-    src: "client.crt"
-    dest: "{{ folder }}/client.crt"
+- name: "Import SSL certificate from {{ slm_host_name }} to a given cacerts keystore"
+  community.general.java_cert:
+    cert_url: "{{ slm_host_name }}"
+    cert_port: 443
+    keystore_path: /etc/ssl/certs/java/cacerts
+    keystore_pass: changeit
+    state: present
