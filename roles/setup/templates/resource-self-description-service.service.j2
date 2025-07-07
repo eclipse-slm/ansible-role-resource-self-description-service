@@ -5,7 +5,7 @@ After=network-online.target
 
 [Service]
 User={{ username }}
-ExecStart=/usr/bin/java -jar {{ download_path }}{{download_file_name}} --consul.acl-token={{ consul_token }} --resource.id={{ resource_id }} --deployment.hostname={{ ansible_default_ipv4.address }} --deployment.scheme=https --aas.submodel-repository.host={{ ansible_default_ipv4.address }} --spring.ssl.bundle.pem.resource.keystore.certificate={{ download_path }}certs/{{ resource_id }}.crt --spring.ssl.bundle.pem.resource.keystore.private-key={{ download_path }}certs/{{ resource_id }}.key --server.ssl.enabled=true --server.ssl.certificate-private-key={{ download_path }}certs/{{ resource_id }}.key --server.ssl.certificate={{ download_path }}certs/{{ resource_id }}.crt
+ExecStart=/usr/bin/java -jar {{ download_path }}{{download_file_name}} --consul.acl-token={{ consul_token }} --resource.id={{ resource_id }} --deployment.hostname={{ ansible_default_ipv4.address }} --deployment.scheme=https --aas.submodel-repository.host={{ ansible_default_ipv4.address }}  --server.ssl.enabled=true --server.ssl.certificate-private-key={{ download_path }}certs/{{ resource_id }}.key --server.ssl.certificate={{ download_path }}certs/{{ resource_id }}.crt
 
 [Install]
 WantedBy=default.target
