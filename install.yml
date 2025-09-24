@@ -8,29 +8,23 @@
       ansible.builtin.include_role:
         name: inventory_helper
 
-- name: Install slm self-description service
-  hosts: all
+    - name: Get SLM config
+      ansible.builtin.include_role:
+        name: setup
+        tasks_from: helper/get_slm_services.yml
+
+- name: Install Resource Self-Description Service
+  hosts: all:!localhost
   gather_facts: yes
   become: yes
   tasks:
-    - name: Get config from environment variables
+    - name: "Get config from environment"
       set_fact:
-        consul_token: "{{ lookup('env', 'CONSUL_TOKEN') }}"
-      no_log: true
-    - assert:
-        that:
-          - (consul_token is defined) and (consul_token|length > 0)
-          - resource_id is defined
-
+        RESOURCE_ID: "{{ lookup('env', 'RESOURCE_ID') }}"
+        VAULT_URL: "{{ lookup('env', 'VAULT_URL') }}"
+        VAULT_APPROLE_ROLE_ID: "{{ lookup('env', 'VAULT_APPROLE_ROLE_ID') }}"
+        VAULT_APPROLE_SECRET_ID: "{{ lookup('env', 'VAULT_APPROLE_SECRET_ID') }}"
     - name: "Include self-description service - install"
       ansible.builtin.include_role:
         name: "setup"
-      vars:
-        slm_host_name: "{{ ((consul_service_meta | from_json).slm_host_name) | default('') }}"
-        slm_host_ip: "{{ ((consul_service_meta | from_json).slm_host_ip) | default('') }}"
-        consul: "{{ ((consul_service_meta | from_json).consul) | default('') }}"
-        aas_registry: "{{ ((consul_service_meta | from_json).aas_registry) | default('') }}"
-        aas_repository: "{{ ((consul_service_meta | from_json).aas_repository) | default('') }}"
-        submodel_registry: "{{ ((consul_service_meta | from_json).submodel_registry) | default('') }}"
-
-
+        tasks_from: install.yml

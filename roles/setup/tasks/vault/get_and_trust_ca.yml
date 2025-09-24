@@ -1,0 +1,37 @@
+- name: "Assert inputs of 'vault | get_and_trust_ca.yml'"
+  assert:
+    that:
+      - (vault_url is defined) and (vault_url|length > 0)
+      - (pki_name is defined) and (pki_name|length > 0)
+    fail_msg: "Variable must be defined and not empty"
+
+- name: "Get CA from vault"
+  uri:
+    url: "{{ vault_url }}/v1/{{ pki_name }}/cert/ca"
+    method: GET
+    headers:
+      X-Vault-Token: "{{ vault_token }}"
+    return_content: yes
+    validate_certs: no
+  register: ca_response
+
+- set_fact:
+    ca_json: "{{ ca_response.content | from_json }}"
+
+- name: "Copy CA certificate to system store"
+  copy:
+    content: "{{ ca_json.data.certificate }}"
+    dest: "/usr/local/share/ca-certificates/{{ pki_name }}.crt"
+    mode: '0644'
+
+- name: "Update systems CA certificates"
+  ansible.builtin.command: update-ca-certificates
+  become: yes
+
+- name: "Import CA certificate to Java cacerts keystore"
+  community.general.java_cert:
+    state: present
+    cert_alias: "{{ pki_name }}"
+    cert_path: "/usr/local/share/ca-certificates/{{ pki_name }}.crt"
+    keystore_path: /etc/ssl/certs/java/cacerts
+    keystore_pass: changeit

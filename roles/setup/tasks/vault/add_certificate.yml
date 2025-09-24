@@ -1,0 +1,40 @@
+- name: "Assert inputs of 'vault | add_certificate.yml'"
+  assert:
+    that:
+      - (_vault_url is defined) and (_vault_url|length > 0)
+      - (_vault_approle_role_id is defined) and (_vault_approle_role_id|length > 0)
+      - (_vault_approle_secret_id is defined) and (_vault_approle_secret_id|length > 0)
+      - (_resource_id is defined) and (_resource_id|length > 0)
+      - (ansible_default_ipv4.address is defined) and (ansible_default_ipv4.address|length > 0)
+      - (_folder is defined) and (_folder | length > 0)
+    fail_msg: "Variable must be defined and not empty"
+
+- name: "Generate a certificate"
+  delegate_to: localhost
+  community.hashi_vault.vault_pki_generate_certificate:
+    auth_method: approle
+    role_id: "{{ _vault_approle_role_id }}"
+    secret_id: "{{ _vault_approle_secret_id }}"
+    url: "{{ _vault_url }}"
+    engine_mount_point: "{{ _pki_name }}"
+    role_name: resource
+    common_name: "{{ ansible_default_ipv4.address }}"
+    ttl: 90d
+  register: cert_data
+
+- block:
+  - name: "Create directory '{{ _folder }}' if it does not exist"
+    ansible.builtin.file:
+      path: "{{ _folder }}"
+      state: directory
+      mode: '0755'
+  - name: "Store key"
+    copy:
+      content: "{{ cert_data.data.data.private_key }}"
+      dest: "{{ _folder }}/resource_cert.key"
+      mode: '0644'
+  - name: "Store certificate"
+    copy:
+      content: "{{ cert_data.data.data.certificate }}"
+      dest: "{{ _folder }}/resource_cert.crt"
+      mode: '0644'

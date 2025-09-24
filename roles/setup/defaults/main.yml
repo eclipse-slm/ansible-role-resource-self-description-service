@@ -1,10 +1,10 @@
 ---
 # defaults file for resource_self_description_service
 resource_self_description_service_version: "0.0.1-SNAPSHOT"
-username: "resource_sds"
+username: "slm"
 port: 8081
 
-
 download_github_user: "eclipse-slm"
-download_file_name: "resource_self_description_service_{{ resource_self_description_service_version }}.jar"
-download_path: "/opt/resource-self-description-service/"
+install_path: "/opt/slm/resource-self-description-service"
+install_executable_name: "resource_self_description_service_{{ resource_self_description_service_version }}.jar"
+install_executable_path: "{{ install_path }}/{{ install_executable_name }}"

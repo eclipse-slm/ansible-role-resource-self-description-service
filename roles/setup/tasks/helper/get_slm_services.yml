@@ -1,0 +1,36 @@
+- name:
+  set_fact:
+    consul_url: "{{ lookup('env', 'CONSUL_URL') }}"
+    consul_token: "{{ lookup('env', 'CONSUL_TOKEN') }}"
+    vault_url: "{{ lookup('env', 'VAULT_URL') }}"
+    vault_token: "{{ lookup('env', 'VAULT_TOKEN') }}"
+    slm_consul_node_name: "SLM"
+
+- name: GET /catalog/service/consul
+  ansible.builtin.uri:
+    url: "{{ consul_url }}/v1/catalog/node/{{ slm_consul_node_name }}"
+    method: GET
+    headers:
+      Authorization: "Bearer {{ consul_token }}"
+  register: get_consul_slm_node
+
+- name: Set public consul server url for localhost
+  set_fact:
+    slm_hostname: "{{ get_consul_slm_node.json.Node.Meta.slm_hostname }}"
+    slm_ip: "{{ get_consul_slm_node.json.Node.Meta.slm_ip }}"
+    keycloak_url: "{{ get_consul_slm_node.json.Node.Meta.keycloak_url }}"
+    aas_registry_url: "{{ get_consul_slm_node.json.Node.Meta.aas_aas_registry_url }}"
+    aas_repository_url: "{{ get_consul_slm_node.json.Node.Meta.aas_aas_repository_url }}"
+    submodel_registry_url: "{{ get_consul_slm_node.json.Node.Meta.aas_submodel_registry_url }}"
+
+- name: Set public consul server url for all hosts
+  set_fact:
+    slm_hostname: "{{ get_consul_slm_node.json.Node.Meta.slm_hostname }}"
+    slm_ip: "{{ get_consul_slm_node.json.Node.Meta.slm_ip }}"
+    keycloak_url: "{{ get_consul_slm_node.json.Node.Meta.keycloak_url }}"
+    aas_registry_url: "{{ get_consul_slm_node.json.Node.Meta.aas_aas_registry_url }}"
+    aas_repository_url: "{{ get_consul_slm_node.json.Node.Meta.aas_aas_repository_url }}"
+    submodel_registry_url: "{{ get_consul_slm_node.json.Node.Meta.aas_submodel_registry_url }}"
+  delegate_to: "{{ item }}"
+  delegate_facts: true
+  loop: "{{ groups['all'] }}"
