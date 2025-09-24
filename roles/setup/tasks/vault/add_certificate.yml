@@ -35,6 +35,6 @@
       mode: '0644'
   - name: "Store certificate"
     copy:
-      content: "{{ cert_data.data.data.certificate }}"
+      content: "{{ cert_data.data.data.certificate }}\n{{ cert_data.data.data.ca_chain | join('\n') }}"
       dest: "{{ _folder }}/resource_cert.crt"
       mode: '0644'
