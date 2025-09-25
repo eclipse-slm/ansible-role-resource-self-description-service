@@ -2,9 +2,17 @@
 - name: Set Download and binary name
   ansible.builtin.include_tasks: helper/set_download_url_and_binary.yml
 
-- name: "Create '{{ username }}' User"
-  ansible.builtin.user:
-    name: "{{ username }}"
+- block:
+  - name: "Check if group 'docker' exists"
+    ansible.builtin.getent:
+      database: group
+      key: docker
+    register: docker_group
+  - name: "Create '{{ username }}' User and add to group docker (if exists)"
+    ansible.builtin.user:
+      name: "{{ username }}"
+      groups: "{{ 'docker' if docker_group.found else '' }}"
+      append: yes
 
 - block:
   - name: "Find installed OpenJDK versions < version 21"
