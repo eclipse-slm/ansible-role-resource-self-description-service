@@ -8,10 +8,10 @@ User={{ username }}
 
 ExecStart=/usr/bin/java -jar {{ install_executable_path }} \
   --resource.id={{ RESOURCE_ID }} \
-  --deployment.scheme=https \
+  --server.port={{ port }} \
+  --deployment.url=https://{{ ansible_host }}:{{ port }} \
   --security.certificate={{ install_path }}/certs/resource_cert.crt \
   --security.private-key={{ install_path }}/certs/resource_cert.key \
-  --deployment.host={{ ansible_default_ipv4.address }} \
   --aas.aas-registry.url={{ aas_registry_url }} \
   --aas.submodel-registry.url={{ submodel_registry_url }} \
   --security.enabled=true \
