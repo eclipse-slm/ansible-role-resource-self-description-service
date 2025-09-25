@@ -111,7 +111,8 @@
     _vault_approle_secret_id: "{{ VAULT_APPROLE_SECRET_ID }}"
     _resource_id: "{{ RESOURCE_ID }}"
     _pki_name: "pki_int_resource-{{ RESOURCE_ID }}"
-    _common_name: "{{ ansible_host }}"
+    _common_name: "{{ inventory_hostname }}"
+    _ip_sans : "{{ inventory_hostname }}"
     _folder: "{{ install_path }}/certs"
 
 - name: "Start resource-self-description-service service"

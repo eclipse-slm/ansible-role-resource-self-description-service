@@ -6,6 +6,7 @@
       - (_vault_approle_secret_id is defined) and (_vault_approle_secret_id|length > 0)
       - (_resource_id is defined) and (_resource_id|length > 0)
       - (_common_name is defined) and (_common_name|length > 0)
+      - (_ip_sans is defined) and (_ip_sans|length > 0)
       - (_folder is defined) and (_folder | length > 0)
     fail_msg: "Variable must be defined and not empty"
 
@@ -19,6 +20,7 @@
     engine_mount_point: "{{ _pki_name }}"
     role_name: resource
     common_name: "{{ _common_name }}"
+    ip_sans: "{{ _ip_sans }}"
     ttl: 90d
   register: cert_data
 
