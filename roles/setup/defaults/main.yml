@@ -6,5 +6,5 @@ port: 8081
 
 download_github_user: "eclipse-slm"
 install_path: "/opt/slm/resource-self-description-service"
-install_executable_name: "resource_self_description_service_{{ resource_self_description_service_version }}.jar"
+install_executable_name: "resource-self-description-service-{{ resource_self_description_service_version }}.jar"
 install_executable_path: "{{ install_path }}/{{ install_executable_name }}"
