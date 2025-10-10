@@ -15,22 +15,44 @@
       append: yes
 
 - block:
-  - name: "Find installed OpenJDK versions < version 21"
+  - name: "Find installed OpenJDK versions < version 17"
     ansible.builtin.shell: |
-      dpkg -l | awk '$2 ~ /openjdk-[0-9]+/ { split($2, a, "-"); if (a[2] < 21) print $2 }'
+      dpkg -l | awk '$2 ~ /openjdk-[0-9]+/ { split($2, a, "-"); if (a[2] < 17) print $2 }'
     register: openjdk_old_packages
-  - name: "Remove old OpenJDK versions < version 21"
+  - name: "Remove old OpenJDK versions < version 17"
     ansible.builtin.apt:
       name: "{{ item }}"
       state: absent
       purge: yes
     loop: "{{ openjdk_old_packages.stdout_lines }}"
     when: openjdk_old_packages.stdout != ""
-  - name: "Install OpenJDK version 21"
-    ansible.builtin.apt:
-      name: openjdk-21-jdk
-      state: present
-      update_cache: yes
+  - name: "Install Eclipse Temurin version 21"
+    block:
+      - name: "Install required packages"
+        ansible.builtin.apt:
+          name:
+            - wget
+            - apt-transport-https
+            - gpg
+          state: present
+          update_cache: yes
+      - name: "Download and install Adoptium GPG key"
+        ansible.builtin.shell: |
+          wget -qO - https://packages.adoptium.net/artifactory/api/gpg/key/public | gpg --dearmor | tee /etc/apt/trusted.gpg.d/adoptium.gpg > /dev/null
+        args:
+          creates: /etc/apt/trusted.gpg.d/adoptium.gpg
+      - name: "Add Adoptium repository"
+        ansible.builtin.shell: |
+          echo "deb https://packages.adoptium.net/artifactory/deb $(awk -F= '/^VERSION_CODENAME/{print$2}' /etc/os-release) main" | tee /etc/apt/sources.list.d/adoptium.list
+        args:
+          creates: /etc/apt/sources.list.d/adoptium.list
+      - name: "Update apt cache"
+        ansible.builtin.apt:
+          update_cache: yes
+      - name: "Install Eclipse Temurin 21 JDK"
+        ansible.builtin.apt:
+          name: temurin-21-jdk
+          state: present
 
 - block:
   - name: "Check download destination"
