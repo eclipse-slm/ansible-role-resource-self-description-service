@@ -3,6 +3,7 @@
     that:
       - (vault_url is defined) and (vault_url|length > 0)
       - (pki_name is defined) and (pki_name|length > 0)
+      - (java_keystore_path is defined) and (java_keystore_path|length > 0)
     fail_msg: "Variable must be defined and not empty"
 
 - name: "Get CA from vault"
@@ -33,5 +34,5 @@
     state: present
     cert_alias: "{{ pki_name }}"
     cert_path: "/usr/local/share/ca-certificates/{{ pki_name }}.crt"
-    keystore_path: /etc/ssl/certs/java/cacerts
+    keystore_path: "{{ java_keystore_path }}"
     keystore_pass: changeit

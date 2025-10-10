@@ -120,22 +120,40 @@
     - { ip: "{{ slm_ip }}", name: "{{ slm_hostname }}" }
 
 - name: "Get and trust SLM root CA certificate"
-  ansible.builtin.include_tasks: vault/get_and_trust_ca.yml
-  vars:
-    vault_url: "{{ lookup('env', 'VAULT_URL') }}"
-    vault_token: "{{ lookup('env', 'VAULT_TOKEN') }}"
-    pki_name: "pki_root_slm"
+  block:
+    - name: "Get JAVA_HOME from installed Java"
+      ansible.builtin.shell: |
+        dirname $(dirname $(readlink -f $(which java)))
+      register: java_home
+      changed_when: false
+    - name: "Set Java keystore path"
+      ansible.builtin.set_fact:
+        java_keystore_path: "{{ java_home.stdout }}/lib/security/cacerts"
+    - name: "Ensure Java keystore exists"
+      ansible.builtin.stat:
+        path: "{{ java_keystore_path }}"
+      register: java_keystore
+    - name: "Fail if Java keystore is missing"
+      ansible.builtin.fail:
+        msg: "Java keystore not found at {{ java_keystore_path }}"
+      when: not java_keystore.stat.exists
 
-- ansible.builtin.include_tasks: vault/add_certificate.yml
-  vars:
-    _vault_url: "{{ VAULT_URL }}"
-    _vault_approle_role_id: "{{ VAULT_APPROLE_ROLE_ID }}"
-    _vault_approle_secret_id: "{{ VAULT_APPROLE_SECRET_ID }}"
-    _resource_id: "{{ RESOURCE_ID }}"
-    _pki_name: "pki_int_resource-{{ RESOURCE_ID }}"
-    _common_name: "{{ inventory_hostname }}"
-    _ip_sans : "{{ inventory_hostname }}"
-    _folder: "{{ install_path }}/certs"
+    - ansible.builtin.include_tasks: vault/get_and_trust_ca.yml
+      vars:
+        vault_url: "{{ lookup('env', 'VAULT_URL') }}"
+        vault_token: "{{ lookup('env', 'VAULT_TOKEN') }}"
+        pki_name: "pki_root_slm"
+
+    - ansible.builtin.include_tasks: vault/add_certificate.yml
+      vars:
+        _vault_url: "{{ VAULT_URL }}"
+        _vault_approle_role_id: "{{ VAULT_APPROLE_ROLE_ID }}"
+        _vault_approle_secret_id: "{{ VAULT_APPROLE_SECRET_ID }}"
+        _resource_id: "{{ RESOURCE_ID }}"
+        _pki_name: "pki_int_resource-{{ RESOURCE_ID }}"
+        _common_name: "{{ inventory_hostname }}"
+        _ip_sans: "{{ inventory_hostname }}"
+        _folder: "{{ install_path }}/certs"
 
 - name: "Start resource-self-description-service service"
   ansible.builtin.systemd:
