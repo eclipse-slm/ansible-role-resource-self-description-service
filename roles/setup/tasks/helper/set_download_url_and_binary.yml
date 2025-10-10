@@ -1,15 +1,12 @@
 ---
-# TODO: Set Download paths
-- name: Set Download and binary name (amd64)
-  ansible.builtin.set_fact:
-    download_url: "https://github.com/{{ download_github_user }}/resource-self-description-service/releases/download/{{ resource_self_description_service_version }}/resource-self-description-service-{{ resource_self_description_service_version }}.jar"
-  when:
-    - ansible_distribution != 'Debian'
-    - ansible_lsb.id != 'Raspbian'
+- name: "Check if architecture is supported"
+  block:
+  - name: Set Download and binary name (64-bit architectures)
+    ansible.builtin.set_fact:
+      download_url: "https://github.com/{{ download_github_user }}/resource-self-description-service/releases/download/{{ resource_self_description_service_version }}/resource-self-description-service-{{ resource_self_description_service_version }}.jar"
+    when: ansible_facts['architecture'] in ['x86_64', 'aarch64', 'arm64']
 
-- name: Set Download and binary name (armv7)
-  ansible.builtin.set_fact:
-    download_url: "https://github.com/{{ download_github_user }}/resource-self-description-service/releases/download/{{ resource_self_description_service_version }}/resource-self-description-{{ resource_self_description_service_version }}.jar"
-  when:
-    - ansible_distribution == 'Debian'
-    - ansible_lsb.id == 'Raspbian'
+- name: "Architecture not supported"
+  fail:
+    msg: "Unsupported architecture '{{ ansible_facts['architecture'] }}', supported architectures are: {{ supported_architectures }}"
+  when: ansible_facts['architecture'] not in supported_architectures
