@@ -17,7 +17,7 @@
 - block:
   - name: "Find installed OpenJDK versions < version 21"
     ansible.builtin.shell: |
-      dpkg -l | awk '/openjdk-[0-9]+/ { match($2, /openjdk-([0-9]+)/, a); if (a[1] < 21) print $2 }'
+      dpkg -l | awk '$2 ~ /openjdk-[0-9]+/ { split($2, a, "-"); if (a[2] < 21) print $2 }'
     register: openjdk_old_packages
   - name: "Remove old OpenJDK versions < version 21"
     ansible.builtin.apt:
